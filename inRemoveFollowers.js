@@ -1,6 +1,7 @@
 const { Builder, By, Key, until } = require('selenium-webdriver');
-const credentials = require("./credentials")
-const wait = require("./services/waiter")
+const wait = require("cdreyer-utilities")
+require("dotenv").config()
+
 
 async function execute() {
     const driver = await new Builder().forBrowser('chrome').build();
@@ -11,7 +12,9 @@ async function execute() {
         await wait(5)
 
         console.log("===== STARTING GET FOLLOWERS ACTION =====")
-        await getFollowers(driver, "_cdreyer");
+        await openFollowersModal(driver, "_cdreyer");
+        
+
     } catch (e) {
         console.log("===== AN ERROR HAS OCURRED =====")
         throw new Error(e.message);
@@ -28,8 +31,8 @@ function login(driver) {
             await wait(2);
 
             // Find the username and password fields and enter the login credentials
-            await driver.findElement(By.name('username')).sendKeys(credentials.username);
-            await driver.findElement(By.name('password')).sendKeys(credentials.password);
+            await driver.findElement(By.name('username')).sendKeys(process.env.IN_USERNAME);
+            await driver.findElement(By.name('password')).sendKeys(process.env.IN_PASSWORD);
             await driver.findElement(By.xpath('//button[@type="submit"]')).click();
 
             resolve();
@@ -39,7 +42,7 @@ function login(driver) {
     })
 }
 
-function getFollowers(driver, username) {
+function openFollowersModal(driver, username) {
     return new Promise(async (resolve, reject) => {
         try {
             driver.get(`https://www.instagram.com/${username}/`)
