@@ -5,15 +5,7 @@ function getFollowersList(driver) {
     return new Promise(async (resolve, reject) => {
         try {
             const fl_elementsParent = await driver.findElements(By.xpath(`//div[@class="_ab8w  _ab94 _ab97 _ab9f _ab9k _ab9p  _ab9- _aba8 _abcm"]`))
-
-            const { names, rmButtons } = await notFollowingBack(fl_elementsParent);
-
-            for (const btn of rmButtons) {
-                await btn.click()
-                await driver.findElement(By.xpath(`//button[@class="_a9-- _a9-_"]`)).click();
-                await wait(1);
-            }
-
+            resolve(await notFollowingBack(fl_elementsParent));
         } catch (e) {
             reject(e);
         }

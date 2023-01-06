@@ -5,6 +5,7 @@ const wait = require("cdreyer-utilities")
 const login = require("./src/login")
 const openFollowersModal = require("./src/openFollowers")
 const getFollowersList = require("./src/followersCheck")
+const removeFollowers = require("./src/removeFollowers")
 
 
 async function execute() {
@@ -21,8 +22,9 @@ async function execute() {
         await openFollowersModal(driver, "_cdreyer");
 
         await wait(2)
-        await getFollowersList(driver);
-
+        const followers = await getFollowersList(driver);
+        await removeFollowers(followers);
+        
     } catch (e) {
         console.log("===== AN ERROR HAS OCURRED =====")
         throw new Error(e.message);
