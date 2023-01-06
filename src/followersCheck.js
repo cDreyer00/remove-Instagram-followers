@@ -6,8 +6,13 @@ function getFollowersList(driver) {
         try {
             const fl_elementsParent = await driver.findElements(By.xpath(`//div[@class="_ab8w  _ab94 _ab97 _ab9f _ab9k _ab9p  _ab9- _aba8 _abcm"]`))
 
-            const names = await notFollowingBack(fl_elementsParent);
-            console.log(names);
+            const { names, rmButtons } = await notFollowingBack(fl_elementsParent);
+
+            for (const btn of rmButtons) {
+                await btn.click()
+                await driver.findElement(By.xpath(`//button[@class="_a9-- _a9-_"]`)).click();
+                await wait(1);
+            }
 
         } catch (e) {
             reject(e);
@@ -17,18 +22,25 @@ function getFollowersList(driver) {
 
 async function notFollowingBack(parents) {
     let names = [];
+    let rmButtons = [];
 
     for (const element of parents) {
         try {
             await element.findElement(By.xpath(`.//div[@class="_aacl _aacn _aacw _aad6"]`));
             let n = await element.findElement(By.xpath(`.//div[@class=" _ab8y  _ab94 _ab97 _ab9f _ab9k _ab9p _abcm"]`));
+            let rmbtn = await element.findElement(By.xpath(`.//button[@class="_acan _aiit _acap _aijb _acat _aj1-"]`));
 
+            rmButtons.push(rmbtn);
             names.push(await n.getText());
         } catch (e) {
             continue;
         }
     }
-    return names;
+
+    return {
+        names,
+        rmButtons
+    }
 }
 
 module.exports = getFollowersList
