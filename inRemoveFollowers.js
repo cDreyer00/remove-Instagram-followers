@@ -10,10 +10,12 @@ async function execute() {
         await login(driver);
 
         await wait(5)
-
+        
         console.log("===== STARTING GET FOLLOWERS ACTION =====")
         await openFollowersModal(driver, "_cdreyer");
         
+        await wait(2)
+        await GetFollowersList(driver);
 
     } catch (e) {
         console.log("===== AN ERROR HAS OCURRED =====")
@@ -48,11 +50,24 @@ function openFollowersModal(driver, username) {
             driver.get(`https://www.instagram.com/${username}/`)
             await wait(3)
             await driver.findElement(By.xpath(`//a[@href="/${username}/followers/"]`)).click();
+            
             resolve();
         } catch (e) {
             reject(e)
         }
     })
+}
+
+function GetFollowersList(driver){
+    return new Promise(async (resolve, reject) =>{
+        try{
+            const elementsParent = await driver.findElements(By.xpath(`//div[@class="_ab8w  _ab94 _ab97 _ab9f _ab9k _ab9p  _ab9- _aba8 _abcm"]`))
+            
+
+        }catch(e){
+            reject(e);
+        }
+    })    
 }
 
 execute()
