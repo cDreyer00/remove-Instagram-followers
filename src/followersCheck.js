@@ -1,16 +1,21 @@
 const { By } = require('selenium-webdriver');
 const wait = require("cdreyer-utilities")
 
-function getFollowersList(driver) {
+function getFollowersList(driver, previousHeight) {
+    if (previousHeight == undefined) previousHeight = 0;
+
     return new Promise(async (resolve, reject) => {
         try {
             const fl_elementsParent = await driver.findElements(By.xpath(`//div[@class="_ab8w  _ab94 _ab97 _ab9f _ab9k _ab9p  _ab9- _aba8 _abcm"]`))
+
             resolve(await notFollowingBack(fl_elementsParent));
+
         } catch (e) {
             reject(e);
         }
     })
 }
+
 
 async function notFollowingBack(parents) {
     let names = [];

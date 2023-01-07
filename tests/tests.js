@@ -1,28 +1,23 @@
-// const { Builder, By, Key, until } = require('selenium-webdriver');
-// const wait = require("cdreyer-utilities")
-// require("dotenv").config()
+const { Builder, By, Key, until } = require('selenium-webdriver');
+const wait = require("cdreyer-utilities")
+require("dotenv").config()
 
-// async function execute() {
-//     const driver = await new Builder().forBrowser('chrome').build();
+async function execute() {
+    const driver = await new Builder().forBrowser('chrome').build();
 
-//     await driver.manage().window().maximize();
+    try {
+        await driver.manage().window().maximize();
 
-//     driver.get("https://www.google.com/");
+        driver.get("https://www.youtube.com/");
+        await wait(5);
+        await driver.executeScript(`
+            let content = document.querySelector("#content");
+            window.scrollTo(0, content.scrollHeight);
+        `);
+        await wait(5);
+    } finally {
+        //driver.quit();
+    }
+}
 
-//     try {
-//         const parent = await driver.findElement(By.xpath(`//div[@jsname="RNNXgb"]`))
-//         const test2;
-//     } catch (e) {
-//         throw new Error(e.message)
-//     } finally {
-//         //driver.quit();
-//     }
-
-
-// }
-
-// // async function deepSearch(parent, xpath){
-// //     return new Promise()
-// // }
-
-// execute();
+execute();
