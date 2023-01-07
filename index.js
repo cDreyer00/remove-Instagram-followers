@@ -1,6 +1,7 @@
 require("dotenv").config()
-const { Builder, By, Key } = require('selenium-webdriver');
 const wait = require("cdreyer-utilities")
+execute();
+const { Builder, By, Key } = require('selenium-webdriver');
 
 const login = require("./src/login")
 const openFollowersModal = require("./src/openFollowers")
@@ -9,6 +10,7 @@ const removeFollowers = require("./src/removeFollowers")
 
 
 async function execute() {
+    await wait(5000);
     const driver = await new Builder().forBrowser('chrome').build();
     await driver.manage().window().maximize();
 
@@ -48,4 +50,3 @@ async function execute() {
     }
 };
 
-execute()
