@@ -1,6 +1,6 @@
 require("dotenv").config()
 const wait = require("cdreyer-utilities")
-const { Builder, By, Key } = require('selenium-webdriver');
+const { Builder, By, Key, until } = require('selenium-webdriver');
 
 const login = require("./src/login")
 const openFollowersModal = require("./src/openFollowers")
@@ -16,19 +16,18 @@ async function execute() {
         console.log("===== STARTING LOG-IN ACTION =====")
         await login(driver);
 
-        await wait(35);
+        //await wait(5);
+        await driver.wait(until.elementLocated(By.xpath(`//img[contains(@alt, '${process.env.IN_USERNAME}')]`)), 60 * 1000);
 
         console.log("===== STARTING GET FOLLOWERS ACTION =====")
-        await openFollowersModal(driver, "_cdreyer");
-        await wait(2)
+        await openFollowersModal(driver, process.env.IN_USERNAME);
+        await wait(4);
+
 
         let fl_modal = await driver.executeScript(`return document.querySelector("._aano")`);
 
         let modalScroll_current = await driver.executeScript(`return arguments[0].scrollTop`, fl_modal);
         let modalScroll_total = await driver.executeScript(`return arguments[0].scrollHeight`, fl_modal);
-        // console.log(modalScroll_total - modalScroll_current);
-        console.log(modalScroll_total);
-        console.log(modalScroll_current);
 
         while ((modalScroll_total - modalScroll_current) > 400) {
 
@@ -39,6 +38,7 @@ async function execute() {
             await wait(1.5);
             modalScroll_current = await driver.executeScript(`return arguments[0].scrollTop`, fl_modal);
             modalScroll_total = await driver.executeScript(`return arguments[0].scrollHeight`, fl_modal);
+
         }
 
     } catch (e) {
