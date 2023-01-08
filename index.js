@@ -1,6 +1,5 @@
 require("dotenv").config()
 const wait = require("cdreyer-utilities")
-execute();
 const { Builder, By, Key } = require('selenium-webdriver');
 
 const login = require("./src/login")
@@ -10,7 +9,6 @@ const removeFollowers = require("./src/removeFollowers")
 
 
 async function execute() {
-    await wait(5000);
     const driver = await new Builder().forBrowser('chrome').build();
     await driver.manage().window().maximize();
 
@@ -18,7 +16,7 @@ async function execute() {
         console.log("===== STARTING LOG-IN ACTION =====")
         await login(driver);
 
-        await wait(5)
+        await wait(35);
 
         console.log("===== STARTING GET FOLLOWERS ACTION =====")
         await openFollowersModal(driver, "_cdreyer");
@@ -42,11 +40,13 @@ async function execute() {
             modalScroll_current = await driver.executeScript(`return arguments[0].scrollTop`, fl_modal);
             modalScroll_total = await driver.executeScript(`return arguments[0].scrollHeight`, fl_modal);
         }
+
     } catch (e) {
         console.log("===== AN ERROR HAS OCURRED =====")
         throw new Error(e.message);
     } finally {
-        //driver.quit()
+        driver.quit()
     }
 };
 
+execute();
